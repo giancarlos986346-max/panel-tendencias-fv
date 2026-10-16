@@ -312,16 +312,51 @@ details.md-det>summary svg{transition:transform .15s;color:var(--muted)}
 details.md-det[open]>summary svg{transform:rotate(90deg)}
 .md-err{padding:18px;border-radius:12px;background:rgba(227,73,72,.06);border:1px solid rgba(227,73,72,.25);font-size:13px;color:var(--ink2);line-height:1.5}
 .md-err b{color:var(--ink)}
+/* ---------- barra lateral plegable ---------- */
+.app{transition:grid-template-columns .22s ease}
+.brand .rail-toggle{margin-left:auto}
+.rail-toggle{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;border:1px solid var(--rail-line);background:transparent;color:var(--rail-2);flex:none}
+.rail-toggle:hover{color:var(--rail-ink);border-color:var(--rail-2)}
+.rail-toggle svg{transition:transform .22s ease}
+.rail-mini{display:none;flex-direction:column;align-items:center;gap:8px}
+.rail-mini button{position:relative;width:40px;height:40px;display:grid;place-items:center;border-radius:10px;border:0;background:transparent;color:var(--rail-2)}
+.rail-mini button:hover{background:var(--rail-soft);color:var(--rail-ink)}
+.rail-mini i{position:absolute;top:4px;right:3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--accent);color:var(--accent-ink);font:600 10px/16px inherit;font-style:normal}
+.rail-mini i:empty{display:none}
+.app.rail-off{grid-template-columns:68px minmax(0,1fr)}
+.rail-off .rail{padding:18px 12px;overflow:hidden;scrollbar-width:none}
+.rail-off .rail>section,.rail-off .brand>div{display:none}
+.rail-off .brand{flex-direction:column;gap:14px;margin-bottom:18px}
+.rail-off .brand .rail-toggle{margin-left:0}
+.rail-off .rail-toggle svg{transform:rotate(180deg)}
+.rail-off .rail-mini{display:flex}
+@media (max-width:1100px){
+  .app.rail-off{grid-template-columns:1fr}
+  .rail-off .rail{padding:12px 16px}
+  .rail-off .brand{flex-direction:row;margin-bottom:0}
+  .rail-off .brand .rail-toggle{margin-left:auto}
+  .rail-off .rail{display:flex;align-items:center;gap:8px}
+  .rail-off .rail-mini{flex-direction:row;order:2}
+  .rail-off .rail-toggle svg{transform:rotate(90deg)}
+  .rail-toggle svg{transform:rotate(-90deg)}
+}
+@media (prefers-reduced-motion:reduce){.app,.rail-toggle svg{transition:none}}
 </style>
 
 </head>
 <body>
 <div class="app">
-  <aside class="rail" aria-label="Datos y filtros">
+  <aside class="rail" id="rail-body" aria-label="Datos y filtros">
     <div class="brand">
       <img src="data:image/png;base64,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" width="40" height="36" alt="Alessa Database" style="flex:none;display:block">
       <div><b>Tendencias FV</b><span>Panel de farmacovigilancia</span></div>
+      <button type="button" class="rail-toggle" id="rail-toggle" aria-controls="rail-body" aria-expanded="true" title="Ocultar panel lateral" aria-label="Ocultar panel lateral"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
     </div>
+    <nav class="rail-mini" aria-label="Accesos rápidos">
+      <button type="button" data-mini="file" title="Cargar Excel" aria-label="Cargar Excel"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg></button>
+      <button type="button" data-mini="filters" title="Filtros" aria-label="Mostrar filtros"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16l-6 7.5V19l-4-2v-4.5L4 5z"/></svg><i id="rail-fcount"></i></button>
+      <button type="button" data-mini="map" title="Columnas reconocidas" aria-label="Columnas reconocidas"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9.5 4v16M14.5 4v16"/></svg></button>
+    </nav>
 
     <section aria-labelledby="h-data">
       <h2 id="h-data">Datos</h2>
@@ -1169,7 +1204,7 @@ function refreshFilterBadges(){
   $$('.fgroup').forEach(d=>{const n=(state.filters[d.dataset.k]||new Set()).size, i=$('summary i',d); i.textContent=n?n+' sel.':fmt(state.dims[d.dataset.k].distinct); i.className=n?'on':'';});
   updateClear();
 }
-function updateClear(){ const any=Object.keys(state.filters).length>0; $('#btn-clear').disabled=!any; }
+function updateClear(){ const n=Object.values(state.filters).reduce((s,x)=>s+x.size,0); $('#btn-clear').disabled=!n; const b=$('#rail-fcount'); if(b)b.textContent=n?String(n):''; }
 function clearFilters(){ state.filters={}; buildFilters(); renderAll(false); }
 
 /* ======================= mapeo de columnas ======================= */
@@ -2163,6 +2198,20 @@ const drop=$('#drop');
 addEventListener('drop',e=>{const f=e.dataTransfer&&e.dataTransfer.files[0]; if(f)loadFile(f);});
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(!document.documentElement.dataset.theme){state.colorCache={};renderAll(false);}});
 
+// Barra lateral plegable (se recuerda entre visitas)
+function setRail(open,save){
+  $('.app').classList.toggle('rail-off',!open);
+  const b=$('#rail-toggle'), l=open?'Ocultar panel lateral':'Mostrar panel lateral'; b.setAttribute('aria-expanded',open); b.title=l; b.setAttribute('aria-label',l);
+  if(save){ try{localStorage.setItem('fv-rail',open?'1':'0');}catch(e){} }
+  // Los gráficos que dependen del ancho se recalculan al terminar la transición
+  setTimeout(()=>{ dispatchEvent(new Event('resize')); if(state.view==='product')renderProductView(); },240);
+}
+$('#rail-toggle').onclick=()=>setRail($('.app').classList.contains('rail-off'),true);
+$('.rail-mini').onclick=e=>{ const b=e.target.closest('[data-mini]'); if(!b)return; const k=b.dataset.mini;
+  if(k==='file'){ $('#file').click(); return; }
+  setRail(true,true);
+  setTimeout(()=>{ if(k==='map'){ $('#mapbox').open=true; $('#mapbox').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'}); } else $('#h-filt').scrollIntoView({block:'start',behavior:reduceMotion?'auto':'smooth'}); },60); };
+try{ if(localStorage.getItem('fv-rail')==='0')setRail(false,false); }catch(e){}
 try{const t=localStorage.getItem('fv-theme'); if(t)document.documentElement.dataset.theme=t;}catch(e){}
 
 bindBuilder(); bindAlluvial(); loadDemo();
